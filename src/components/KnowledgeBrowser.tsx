@@ -162,8 +162,10 @@ export function KnowledgeBrowser({ onNavigate, initialStandardId }: KnowledgeBro
                     <div className="space-y-1">
                       <h3 className="font-medium">Section {section.id}</h3>
                       <p className="text-sm text-muted-foreground">{section.title}</p>
-                      <p className="text-xs text-muted-foreground line-clamp-2">
-                        {section.content.substring(0, 150)}...
+                      <p className="text-xs text-muted-foreground overflow-hidden">
+                        <span className="block truncate">
+                          {section.content.substring(0, 150)}...
+                        </span>
                       </p>
                     </div>
                     <Button variant="ghost" size="sm">

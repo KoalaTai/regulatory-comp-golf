@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,7 +22,9 @@ export function AuditSimulations({ onNavigate }: AuditSimulationsProps) {
   const [selectedSimulation, setSelectedSimulation] = useState<string | null>(null);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
 
-  const handleCreateSimulation = (formData: FormData) => {
+  const handleCreateSimulation = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
     const title = formData.get('title') as string;
     const description = formData.get('description') as string;
     const standard = formData.get('standard') as string;
@@ -88,7 +90,7 @@ export function AuditSimulations({ onNavigate }: AuditSimulationsProps) {
                 Set up a new audit scenario to practice compliance procedures.
               </DialogDescription>
             </DialogHeader>
-            <form action={handleCreateSimulation}>
+            <form onSubmit={handleCreateSimulation}>
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="title">Title</Label>
@@ -180,8 +182,10 @@ export function AuditSimulations({ onNavigate }: AuditSimulationsProps) {
                 </CardHeader>
                 <CardContent>
                   {sim.description && (
-                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                      {sim.description}
+                    <p className="text-sm text-muted-foreground mb-3 overflow-hidden">
+                      <span className="block truncate">
+                        {sim.description}
+                      </span>
                     </p>
                   )}
                   <div className="flex items-center justify-between">
@@ -215,7 +219,9 @@ function SimulationDetail({ simulation, onBack, updateSimulation }: SimulationDe
 
   const standard = regulatoryStandards.find(s => s.id === simulation.standard);
 
-  const handleAddFinding = (formData: FormData) => {
+  const handleAddFinding = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
     const title = formData.get('title') as string;
     const description = formData.get('description') as string;
     const severity = formData.get('severity') as 'minor' | 'major' | 'critical';
@@ -312,7 +318,7 @@ function SimulationDetail({ simulation, onBack, updateSimulation }: SimulationDe
                 Document a new finding from your audit simulation.
               </DialogDescription>
             </DialogHeader>
-            <form action={handleAddFinding}>
+            <form onSubmit={handleAddFinding}>
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="title">Finding Title</Label>
