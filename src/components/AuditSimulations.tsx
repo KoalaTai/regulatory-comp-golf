@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { ArrowLeft, Plus, ClipboardText, AlertTriangle, CheckCircle, XCircle } from '@phosphor-icons/react';
 import { useSimulation } from '@/hooks/use-simulation';
 import { regulatoryStandards } from '@/data/standards';
+import { auditSimulations } from '@/data/complianceData';
 import { toast } from 'sonner';
 import type { AuditSimulation, AuditFinding } from '@/types';
 
@@ -18,9 +19,17 @@ interface AuditSimulationsProps {
 }
 
 export function AuditSimulations({ onNavigate }: AuditSimulationsProps) {
-  const { simulations, createSimulation, updateSimulation, deleteSimulation } = useSimulation();
+  const { simulations, createSimulation, updateSimulation, deleteSimulation, setSimulations } = useSimulation();
   const [selectedSimulation, setSelectedSimulation] = useState<string | null>(null);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+
+  // Initialize with sample data if no simulations exist
+  useEffect(() => {
+    if (simulations.length === 0) {
+      // Load sample simulations
+      setSimulations(auditSimulations);
+    }
+  }, [simulations.length, setSimulations]);
 
   const handleCreateSimulation = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -144,14 +153,10 @@ export function AuditSimulations({ onNavigate }: AuditSimulationsProps) {
                 <ClipboardText className="h-8 w-8 text-muted-foreground" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold mb-2">No simulations yet</h3>
+                <h3 className="text-lg font-semibold mb-2">Loading sample simulations...</h3>
                 <p className="text-muted-foreground mb-4">
-                  Create your first audit simulation to start practicing compliance procedures.
+                  Sample audit simulations are being loaded to demonstrate functionality.
                 </p>
-                <Button onClick={() => setShowCreateDialog(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create First Simulation
-                </Button>
               </div>
             </div>
           </CardContent>

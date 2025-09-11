@@ -51,6 +51,7 @@ export function useSimulation(id?: string) {
   return {
     simulations,
     simulation,
+    setSimulations,
     createSimulation,
     updateSimulation,
     deleteSimulation,
